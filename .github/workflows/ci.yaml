@@ -4,7 +4,7 @@ on:
   push:
 
 jobs:
-  TODO-all-in-one-job:
+  all-in-one-job:
     runs-on: ubuntu-latest
 
     strategy:
@@ -22,7 +22,7 @@ jobs:
           python-version: "${{ matrix.python-version }}"
 
       - name: setup uv
-        uses: astral-sh/setup-uv@v5
+        uses: astral-sh/setup-uv@v6
         with:
           enable-cache: true
 
@@ -30,6 +30,10 @@ jobs:
         run: uv sync --locked --all-extras --dev && uv pip install -e .
 
       - name: run pre-commit
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pre-commit/
+          key: pre-commit-4|${{ env.pythonLocation }}|${{ hashFiles('.pre-commit-config.yaml') }}
         run: uv run pre-commit run --all-files
 
       - name: run pytest
