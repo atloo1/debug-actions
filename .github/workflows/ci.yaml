@@ -18,11 +18,11 @@ jobs:
       matrix:
         python-version: ["3.10"]
 
-    steps:
-      - uses: ./.github/workflows/setup-project.yaml
-        with:
-          python-version: "${{ matrix.python-version }}"
+    uses: ./.github/workflows/setup-project.yaml
+    with:
+      python-version: "${{ matrix.python-version }}"
 
+    steps:
       - name: run pre-commit
         run: uv run pre-commit run --all-files
 
@@ -34,10 +34,10 @@ jobs:
       matrix:
         python-version: ["3.10"]
 
-    steps:
-      - uses: ./.github/workflows/setup-project.yaml
-        with:
-          python-version: "${{ matrix.python-version }}"
+    uses: ./.github/workflows/setup-project.yaml
+    with:
+      python-version: "${{ matrix.python-version }}"
 
+    steps:
       - name: run pytest
         run: uv run pytest
