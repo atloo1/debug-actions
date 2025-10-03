@@ -32,12 +32,16 @@ jobs:
   pre-commit:
     needs: setup
 
+    runs-on: ubuntu-latest
+
     steps:
       - name: run pre-commit
         run: uv run pre-commit run --all-files
 
   pytest:
     needs: setup
+
+    runs-on: ubuntu-latest
 
     steps:
       - name: run pytest
