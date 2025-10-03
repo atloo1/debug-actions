@@ -12,10 +12,10 @@ jobs:
       - name: checkout
         uses: actions/checkout@v4
 
-      - name: "setup Python {% raw %}${{ inputs.python-version }}{% endraw %}"
+      - name: "setup Python ${{ inputs.python-version }}"
         uses: actions/setup-python@v5
         with:
-          python-version: "{% raw %}${{ inputs.python-version }}{% endraw %}"
+          python-version: "${{ inputs.python-version }}"
 
       - name: setup uv
         uses: astral-sh/setup-uv@v5
