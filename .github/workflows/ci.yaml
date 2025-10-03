@@ -4,33 +4,18 @@ on:
   push:
 
 jobs:
-  setup: &setup
-    - name: checkout
-      uses: actions/checkout@v4
-
-    - name: "setup Python ${{ matrix.python-version }}"
-      uses: actions/setup-python@v5
-      with:
-        python-version: "${{ matrix.python-version }}"
-
-    - name: setup uv
-      uses: astral-sh/setup-uv@v6
-      with:
-        enable-cache: true
-
-    - name: install project
-      run: uv sync --locked --all-extras --dev && uv pip install -e .
-
   pre-commit:
-    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.10", "3.11"]
-
+        python-version: [
+          "3.10",
+          "3.11"
+        ]
+    uses: ./.github/workflows/ci-setup.yml
+    with:
+      python-version: ${{ matrix.python-version }}
     steps:
-      - name: *setup
-
       - name: cache pre-commit
         uses: actions/cache@v3
         with:
@@ -43,14 +28,16 @@ jobs:
         run: uv run pre-commit run --all-files
 
   pytest:
-    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.10", "3.11"]
-
+        python-version: [
+          "3.10",
+          "3.11"
+        ]
+    uses: ./.github/workflows/ci-setup.yml
+    with:
+      python-version: ${{ matrix.python-version }}
     steps:
-      - name: *setup
-
       - name: run pytest
         run: uv run pytest
