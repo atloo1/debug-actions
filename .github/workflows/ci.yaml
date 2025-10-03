@@ -4,22 +4,22 @@ on:
   push:
 
 jobs:
-  setup:
+  TODO-all-in-one-job:
     runs-on: ubuntu-latest
 
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.10", "3.11"]
+        python-version: ["3.10"]
 
     steps:
       - name: checkout
         uses: actions/checkout@v4
 
-      - name: "setup Python ${{ inputs.python-version }}"
+      - name: "setup Python ${{ matrix.python-version }}"
         uses: actions/setup-python@v5
         with:
-          python-version: "${{ inputs.python-version }}"
+          python-version: "${{ matrix.python-version }}"
 
       - name: setup uv
         uses: astral-sh/setup-uv@v5
@@ -27,22 +27,10 @@ jobs:
           enable-cache: true
 
       - name: install project
-        run: uv sync --locked --all-extras --dev
+        run: uv sync --locked --all-extras --, "3.11"dev
 
-  pre-commit:
-    needs: setup
-
-    runs-on: ubuntu-latest
-
-    steps:
       - name: run pre-commit
         run: uv run pre-commit run --all-files
 
-  pytest:
-    needs: setup
-
-    runs-on: ubuntu-latest
-
-    steps:
       - name: run pytest
         run: uv run pytest
