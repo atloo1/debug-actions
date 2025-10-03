@@ -1,0 +1,21 @@
+[project]
+authors = [
+    {name = "atloo1", email = "15357562+atloo1@users.noreply.github.com"},
+]
+dependencies = [
+    "pre-commit>=4.3.0",
+    "pytest>=8.4.2",
+]
+description = ""
+license = "MIT"
+name = "debug-actions"
+readme = "README.md"
+requires-python = ">=3.10"
+version = "0.1.0"
+
+[tool.ruff]
+line-length = 120
+lint.extend-select = ["I"]  # sort imports
+
+[tool.ruff.format]
+quote-style = "single"
