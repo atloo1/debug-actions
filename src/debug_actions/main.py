@@ -4,7 +4,6 @@ TODO docstring
 
 
 def main():
-    print('foo')
     raise NotImplementedError
 
 
