@@ -26,14 +26,18 @@ jobs:
         with:
           enable-cache: true
 
-      - name: install project
-        run: uv sync --locked --all-extras --dev && uv pip install -e .
-
-      - name: run pre-commit
+      - name: cache pre-commit
         uses: actions/cache@v3
         with:
           path: ~/.cache/pre-commit/
           key: pre-commit-4|${{ env.pythonLocation }}|${{ hashFiles('.pre-commit-config.yaml') }}
+          restore-keys: |
+            pre-commit-4|${{ env.pythonLocation }}|
+
+      - name: install project
+        run: uv sync --locked --all-extras --dev && uv pip install -e .
+
+      - name: run pre-commit
         run: uv run pre-commit run --all-files
 
       - name: run pytest
