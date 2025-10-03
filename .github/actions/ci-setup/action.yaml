@@ -1,28 +1,25 @@
-name: ci-setup
+name: "ci-setup"
+description: "Setup Python, uv, and project dependencies"
+runs:
+  using: "composite"
+  steps:
+    - name: checkout
+      uses: actions/checkout@v4
 
-on:
-  workflow_call:
-    inputs:
-      python-version:
-        required: true
-        type: string
+    - name: setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ inputs.python-version }}
 
-jobs:
-  setup:
-    runs-on: ubuntu-latest
-    steps:
-      - name: checkout
-        uses: actions/checkout@v4
+    - name: setup uv
+      uses: astral-sh/setup-uv@v6
+      with:
+        enable-cache: true
 
-      - name: "setup Python ${{ inputs.python-version }}"
-        uses: actions/setup-python@v5
-        with:
-          python-version: "${{ inputs.python-version }}"
+    - name: install project
+      run: uv sync --locked --all-extras --dev && uv pip install -e .
 
-      - name: setup uv
-        uses: astral-sh/setup-uv@v6
-        with:
-          enable-cache: true
-
-      - name: install project
-        run: uv sync --locked --all-extras --dev && uv pip install -e .
+inputs:
+  python-version:
+    description: "Python version to use"
+    required: true
